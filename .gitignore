@@ -3,4 +3,5 @@
 tags
 releasing/out
 compile_commands.json
-
+cscope.*
+verible.db
