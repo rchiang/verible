@@ -10,7 +10,7 @@
 [![codecov](https://codecov.io/gh/chipsalliance/verible/branch/master/graph/badge.svg?token=5f656dpmDT)](https://codecov.io/gh/chipsalliance/verible)
 
 <!--*
-freshness: { owner: 'hzeller' reviewed: '2020-10-08' }
+freshness: { owner: 'hzeller' reviewed: '2022-08-31' }
 *-->
 
 The Verible project's main mission is to parse SystemVerilog (IEEE 1800-2017)
@@ -33,75 +33,12 @@ A lesser (but notable) objective is that the language-agnostic components of
 Verible be usable for rapidly developing language support tools for other
 languages.
 
-## Developers, Welcome
-
-For source code browsing, we recommend using the fully-indexed and searchable
-mirror at https://cs.opensource.google/verible/verible.
-
-If you'd like to contribute, check out the [contributing](./CONTRIBUTING.md)
-guide and the [development resources](./doc/development.md).
-
-## Build
-
-Verible's code base is written in C++.
-
-To build, you need the [bazel] build system and a C++17 compatible compiler
-(e.g. >= g++-9), as well as python3.
-
-Use your package manager to install the dependencies; on a system with
-the nix package manager simply run `nix-shell` to get a build environment.
-
-```bash
-# Build all tools and libraries
-bazel build -c opt //...
-```
-
-You can access the generated artifacts under `bazel-bin/`. For instance the
-syntax checker will be at
-`bazel-bin/verilog/tools/syntax/verible-verilog-syntax` (corresponding to the
-target name `//verilog/tools/syntax:verible-verilog-syntax`).
-
-### Building on systems with glibc >= 2.34
-
-To build Verible on systems with glibc >= 2.34, you need to use install flex and bison. Then, build Verible with
-
-```bash
-# Also append the option '--//bazel:use_local_flex_bison' to test/install commands
-bazel build -c opt  --//bazel:use_local_flex_bison //...
-```
-
 ### Installation
 
 For simple installation, we provide regular [binary releases].
 
-If you prefer to build and install the binaries locally yourself:
-
-```bash
-# In your home directory
-bazel run -c opt :install -- ~/bin
-
-# For a system directory that requires root-access, call with -s option.
-# (Do _not_ run bazel with sudo.)
-bazel run -c opt :install -- -s /usr/local/bin
-```
-
-### Test
-
-We strongly encourage running the test suite using [bazel]:
-
-```bash
-# Run all tests
-bazel test -c opt //...
-```
-
-## Mailing Lists
-
-Join the Verible community!
-
-*   Developers: verible-dev@googlegroups.com
-    ([join](https://groups.google.com/forum/#!forum/verible-dev/join))
-*   Users: verible-users@googlegroups.com
-    ([join](https://groups.google.com/forum/#!forum/verible-users/join))
+If you prefer to build and install the binaries locally yourself, see
+details below in the [Developers](#developers-welcome) section.
 
 ## SystemVerilog Developer Tools
 
@@ -132,6 +69,8 @@ Features:
  * Rule deck configurability
  * Waiver mechanisms: in-file, external waiver file
  * [Github SystemVerilog linter action][github-lint-action] available.
+
+![Integrating Verible Linter in Github screenshot](./img/example-github-integration.png)
 
 Documentation:
 
@@ -169,6 +108,11 @@ also directly in your editor.
 
 It implements the standardized [language server protocol] that is supported
 by a myriad of editors and IDEs.
+
+The language server provides formatting and linting. If possible, it also
+provides quick-fixes
+
+![Showing a lint message with quick-fix in vscode screenshot](./img/language-server-demo-vscode.png)
 
 ### Lexical Diff
 
@@ -212,11 +156,101 @@ navigation.
 TODO(minatoma): short animation of hover/navigation features
 -->
 
-### Future Intent
+## Developers, Welcome
+
+For source code browsing, we recommend using the fully-indexed and searchable
+mirror at https://cs.opensource.google/verible/verible.
+
+If you'd like to contribute, check out the [contributing](./CONTRIBUTING.md)
+guide and the [development resources](./doc/development.md).
+
+### Build
+
+Verible's code base is written in C++.
+
+To build, you need the [bazel] (>= 4.0) build system and a C++17 compatible compiler
+(e.g. >= g++-9), as well as python3.
+
+Use your package manager to install the dependencies; on a system with
+the nix package manager simply run `nix-shell` to get a build environment.
+
+```bash
+# Build all tools and libraries
+bazel build -c opt //...
+```
+
+You can access the generated artifacts under `bazel-bin/`. For instance the
+syntax checker will be at
+`bazel-bin/verilog/tools/syntax/verible-verilog-syntax` (corresponding to the
+target name `//verilog/tools/syntax:verible-verilog-syntax`).
+
+### Optionally using local flex/bison for build
+
+Flex and Bison, that are needed for the parser generation, are compiled as part
+of the build process. But if for any reason you want or need local tools (e.g.
+if you encounter a compile problem with them - please file a bug then)
+can choose so by adding `--//bazel:use_local_flex_bison` to your bazel
+command line:
+
+```bash
+# Also append the option '--//bazel:use_local_flex_bison' to test/install commands
+bazel build -c opt  --//bazel:use_local_flex_bison //...
+```
+
+### Installation
+
+For simple installation, we provide regular [binary releases].
+
+If you prefer to build and install the binaries locally yourself:
+
+```bash
+# In your home directory
+bazel run -c opt :install -- ~/bin
+
+# For a system directory that requires root-access, call with -s option.
+# (Do _not_ run bazel with sudo.)
+bazel run -c opt :install -- -s /usr/local/bin
+```
+
+(this requies a compliant `install` utility, otherwise simply copy
+the binaries from `bazel-bin/` to your desired location)
+
+### Test
+
+We strongly encourage running the test suite using [bazel]:
+
+```bash
+# Run all tests
+bazel test -c opt //...
+```
+
+Whenever adding new features in file, say, `foo.cc` always make sure to also
+update (or add) the corresponding `foo_test.cc`. Once you've written the
+test, you can use `.github/bin/generate-coverage-html.sh` to double-check
+that you have covered all code-paths in your test; narrow the coverage
+run to your test to make sure coverage is not accidentally coming from
+unrelated tests that happen to use the library:
+
+```bash
+MODE=coverage .github/bin/build-and-test.sh //foo/bar:foo_test
+.github/bin/generate-coverage-html.sh
+```
+
+## Mailing Lists
+
+Join the Verible community!
+
+*   Developers: verible-dev@googlegroups.com
+    ([join](https://groups.google.com/forum/#!forum/verible-dev/join))
+*   Users: verible-users@googlegroups.com
+    ([join](https://groups.google.com/forum/#!forum/verible-users/join))
+
+### Future
 
 The Verible team is interested in exploring how it can help other tool
 developers in providing a SystemVerilog front end, for example, emitting an
-abstract syntax tree (AST). If you are interested in collaborating, contact us.
+abstract syntax tree (AST) or possibly even provide more higher-level
+[UHDM] format. If you are interested in collaborating, contact us.
 
 [bazel]: https://bazel.build/
 [SV-LRM]: https://ieeexplore.ieee.org/document/8299595
@@ -225,3 +259,4 @@ abstract syntax tree (AST). If you are interested in collaborating, contact us.
 [github-format-action]: https://github.com/chipsalliance/verible-formatter-action
 [binary releases]: https://github.com/chipsalliance/verible/releases
 [language server protocol]: https://microsoft.github.io/language-server-protocol/
+[UHDM]: https://github.com/chipsalliance/UHDM

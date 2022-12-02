@@ -84,7 +84,7 @@ Checks that there are no occurrences of consecutive null statements like `;;` Se
 Enabled by default: true
 
 ### forbid-defparam
-Do not use defparam. See [Style: defparam].
+Do not use defparam. See [Style: module-instantiation].
 
 Enabled by default: true
 
@@ -317,4 +317,4 @@ Enabled by default: true
 
 ## Version
 
-Generated on 2022-06-12 19:55:38 -0700 from [e8ccdd7d](https://github.com/google/verible/commit/e8ccdd7da5dc01a6aa640f1ab2c8a6c7384798c4)
+Generated on 2022-12-02 14:49:45 -0800 from [ea509c51](https://github.com/google/verible/commit/ea509c51eaf0cecd93ded859673fdbf6e12af6fd)
