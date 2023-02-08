@@ -14,6 +14,7 @@ package(
         "//verible/verilog/tools/kythe:__pkg__",
         "//verible/verilog/tools/ls:__pkg__",  # DocumentSymbol
         "//verible/verilog/tools/syntax:__pkg__",  # for printing
+        "//verible/verilog/tools/va2:__pkg__",  # for printing
     ],
     features = ["layering_check"],
 )
