@@ -11,3 +11,5 @@ verible_clang-tidy.out
 # Local user config
 .envrc
 .direnv
+cscope.*
+verible.db
