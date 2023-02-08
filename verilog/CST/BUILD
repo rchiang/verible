@@ -12,6 +12,7 @@ package(
         "//verilog/tools/kythe:__pkg__",
         "//verilog/tools/ls:__pkg__",  # DocumentSymbol
         "//verilog/tools/syntax:__pkg__",  # for printing
+        "//verilog/tools/va2:__pkg__",  # For va2 binary
     ],
     features = ["layering_check"],
 )
