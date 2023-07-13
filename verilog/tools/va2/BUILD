@@ -24,11 +24,11 @@ cc_binary(
              "VA2TreeNode.cc", ],
     visibility = ["//visibility:public"],
     deps = [
-      "//common/text:concrete_syntax_leaf",
+      "//common/text:concrete-syntax-leaf",
       "//common/text:visitors",
-      "//verilog/analysis:symbol_table",
-      "//verilog/analysis:verilog_project",
-      "//verilog/CST:verilog_nonterminals",
+      "//verilog/analysis:symbol-table",
+      "//verilog/analysis:verilog-project",
+      "//verilog/CST:verilog-nonterminals",
     ],
 )
 
@@ -38,9 +38,9 @@ cc_binary(
     srcs = [ "apitest.cc" ],
     visibility = ["//visibility:public"],
     deps = [
-      "//verilog/analysis:symbol_table",
-      "//verilog/analysis:verilog_project",
-      "//verilog/CST:verilog_nonterminals",
+      "//verilog/analysis:symbol-table",
+      "//verilog/analysis:verilog-project",
+      "//verilog/CST:verilog-nonterminals",
     ],
 )
 
