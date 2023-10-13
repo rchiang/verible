@@ -27,6 +27,7 @@ enum class TrackingState {
   parentIsInstantiationBase,
   parentIsInstantiationType,
   parentIsDataType,
+  parentIsLocalRoot,
   parentIsUnqualifiedId,
   // foundEndmodule,
   unknownState
