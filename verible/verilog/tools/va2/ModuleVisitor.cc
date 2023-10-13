@@ -71,6 +71,13 @@ void ModuleVisitor::Visit(const verible::SyntaxTreeNode& node) {
       state = TrackingState::foundModuleName;
     }
   } else if (state == TrackingState::parentIsDataType) {
+    if (node.MatchesTag(verilog::NodeEnum::kLocalRoot)) {
+      //std::cout << "Found kLocalRoot" << std::endl;
+      state = TrackingState::parentIsLocalRoot;
+    } else {
+      state = TrackingState::foundModuleName;
+    }
+  } else if (state == TrackingState::parentIsLocalRoot) {
     if (node.MatchesTag(verilog::NodeEnum::kUnqualifiedId)) {
       //std::cout << "Found kUnqualifiedId" << std::endl;
       state = TrackingState::parentIsUnqualifiedId;
